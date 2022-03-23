@@ -10,9 +10,8 @@
         <label for="titulo">TÍTULO</label>
         <input
           id="titulo"
-          @input="foto.titulo = $event.target.value"
           autocomplete="off"
-          :value="foto.titulo"
+          v-model.lazy="foto.titulo"
         />
       </div>
 
@@ -20,20 +19,18 @@
         <label for="url">URL</label>
         <input
           id="url"
-          @input="foto.url = $event.target.value"
           autocomplete="off"
-          :value="foto.url"
+          v-model.lazy="foto.url"
         />
-        <imagem-responsiva />
+        <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
       </div>
 
       <div class="controle">
         <label for="descricao">DESCRIÇÃO</label>
         <textarea
           id="descricao"
-          @input="foto.descricao = $event.target.value"
           autocomplete="off"
-          :value="foto.descricao"
+          v-model="foto.descricao"
         ></textarea>
       </div>
 
