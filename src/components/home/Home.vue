@@ -4,14 +4,14 @@
 <template>
   <div>
 
-    <h1 class="centralizado">{{ titulo }}</h1>
+    <h1 v-meu-transform:scale.animate="1.2" class="centralizado">{{ titulo }}</h1>
 
     <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="filtre pelo título da foto">
 
     <ul class="lista-fotos">
       <li class="lista-fotos-item" v-for="foto of fotosComFiltro" :key="foto">
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva :url="foto.url" :titulo="foto.titulo"/>
+          <imagem-responsiva v-meu-transform:scale.animate="1.5" :url="foto.url" :titulo="foto.titulo"/>
 
               <meu-botao 
                 tipo="button"
@@ -73,9 +73,7 @@ export default {
   },
 
   created() {
-
-    this.$http
-      .get('http://localhost:3000/v1/fotos')
+    this.$http.get('http://localhost:3000/v1/fotos')
       .then(res => res.json())
       .then(fotos => this.fotos = fotos);
   }
