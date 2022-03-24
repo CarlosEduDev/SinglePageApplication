@@ -6,6 +6,8 @@
 
     <h1 v-meu-transform:scale.animate="1.2" class="centralizado">{{ titulo }}</h1>
 
+    <p v-show="mensagem" >{{ mensagem }}</p>
+
     <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="filtre pelo título da foto">
 
     <ul class="lista-fotos">
@@ -17,7 +19,7 @@
                 tipo="button"
                  rotulo="REMOVER"
                  @botaoAtivado="remove(foto)"
-                 :confirmacao="false"
+                 :confirmacao="true"
                  estilo="perigo"
                  >
              </meu-botao>
@@ -46,10 +48,9 @@ export default {
   data () {
     return {
       titulo: 'Alurapic', 
-
       fotos: [],
-
-      filtro: ''
+      filtro: '',
+      mensagem:''
     }
   },
 
@@ -57,9 +58,21 @@ export default {
 
     remove(foto){
       alert("removida"+ foto.titulo);
+      this.$http.delete(`http://localhost:3000/v1/fotos/${foto._id}`)
+      .then(() => {
+        this.mensagem="Imagem removida";
+        let indice = this.fotos.indexOf(foto);
+        this.fotos.splice(indice, 1);
+      },
+      err =>{
+        this.mensagem="Falha ao remover imagem";
+        console.log(err)
+      }
+      )
     }
 
   },
+  
 
   computed: {
     fotosComFiltro() {
