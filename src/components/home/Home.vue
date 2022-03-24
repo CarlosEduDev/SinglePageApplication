@@ -57,8 +57,7 @@ export default {
   methods: {
 
     remove(foto){
-      alert("removida"+ foto.titulo);
-      this.$http.delete(`http://localhost:3000/v1/fotos/${foto._id}`)
+      this.resource.delete({id:foto._id})
       .then(() => {
         this.mensagem="Imagem removida";
         let indice = this.fotos.indexOf(foto);
@@ -72,7 +71,7 @@ export default {
     }
 
   },
-  
+
 
   computed: {
     fotosComFiltro() {
@@ -86,7 +85,9 @@ export default {
   },
 
   created() {
-    this.$http.get('http://localhost:3000/v1/fotos')
+    this.resource = this.$resource('v1/fotos{/id}');
+    this.resource
+      .query()
       .then(res => res.json())
       .then(fotos => this.fotos = fotos);
   }
