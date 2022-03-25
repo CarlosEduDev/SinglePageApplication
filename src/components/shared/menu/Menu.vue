@@ -3,7 +3,7 @@
     <nav>
       <ul>       
           <li v-for="rota in rotas" :key="rota">
-            <router-link :to="rota.path ? rota.path : '/'">{{rota.titulo}}</router-link>
+            <router-link :to="{name:rota.name}">{{rota.titulo}}</router-link>
           </li>
       </ul>
     </nav>
