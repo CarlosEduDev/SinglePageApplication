@@ -1,7 +1,10 @@
 // alurapic/src/routes.js
 
 import Home from './components/home/Home.vue';
-import Cadastro from './components/cadastro/Cadastro.vue';
+//import Cadastro from './components/cadastro/Cadastro.vue';
+
+//layze loading, nao funciona
+const Cadastro = () => System.import('./components/cadastro/Cadastro.vue');
 
 // adicionando a propriedade título
 
