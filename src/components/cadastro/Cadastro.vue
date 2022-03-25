@@ -5,23 +5,34 @@
     <h1 class="centralizado">Cadastro</h1>
     <h2 class="centralizado"></h2>
 
+    <h1 v-if='foto._id' class="centralizado">Alteração</h1>
+    <h1 v-else class="centralizado">Inclusão</h1>
+
     <form @submit.prevent="grava()">
       <div class="controle">
         <label for="titulo">TÍTULO</label>
         <input
+          data-vv-as="titulo"
+          name="titulo"
           id="titulo"
           autocomplete="off"
-          v-model.lazy="foto.titulo"
+          v-model="foto.titulo"
+          v-validate data-vv-rules="required|min:3|max:30"
         />
+        <span class="erro" v-show="errors.has('titulo')">{{ errors.first('titulo') }}</span>
       </div>
 
       <div class="controle">
         <label for="url">URL</label>
         <input
+          data-vv-as="url"
+          name="url"
           id="url"
           autocomplete="off"
-          v-model.lazy="foto.url"
+          v-model="foto.url"
+          v-validate data-vv-rules="required"
         />
+        <span class="erro" v-show="errors.has('url')">{{ errors.first('url') }}</span>
         <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
       </div>
 
@@ -58,19 +69,37 @@ export default {
 
   data() {
     return {
-      foto: new Foto()
+      foto: new Foto(),
+      id: this.$route.params.id
     };
   },
 
   methods: {
     grava() {
-      this.service.cadastra(this.foto)
-      .then(()=>this.foto = new Foto(), err => console.log(err));
-    },
+        this.$validator
+        .validateAll()
+        .then(sucess => {
+          if(sucess){
+
+                this.service.cadastra(this.foto)
+                .then(()=>{
+                    if(this.foto._id){
+                        this.$router.push({name:'home'});
+                    }
+                    this.foto = new Foto()
+                },  err => console.log(err));
+
+          }
+        })
+    } 
   },
 
   created(){
     this.service = new FotoService(this.$resource);
+    if(this.id){
+       this.service.busca(this.id)
+       .then(foto => this.foto = foto, err => console.log(err));
+    }
   }
 
 };
@@ -98,5 +127,9 @@ export default {
 
 .centralizado {
   text-align: center;
+}
+
+.erro{
+  color: red;
 }
 </style>
